@@ -1,35 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import firebase, { FirebaseContext } from "./firebase";
+import useAuthentication from "./hooks/useAuthentication";
+// import {
+//   getAuth,
+//   createUserWithEmailAndPassword,
+//   updateProfile,
+// } from "firebase/auth";
+// import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+// import { ChangeEvent, useState } from "react";
+import { Register } from "./modules";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [urlPhoto, setUrlPhoto] = useState<string>();
+  const user = useAuthentication();
+
+  // const auth = getAuth();
+  // const storage = getStorage();
+
+  // const handleRegister = async (email: string, password: string) => {
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       const user = userCredential.user;
+  //       updateProfile(user, {
+  //         displayName: "Luis Mario",
+  //         photoURL: urlPhoto,
+  //       }).then(() => {
+  //         console.log("se actualizo el perfil");
+  //       });
+  //       console.log({ user });
+  //     })
+  //     .catch((error) => {
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       console.log({ errorCode, errorMessage });
+  //     });
+  // };
+
+  // const fileHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+
+  //   if (file) {
+  //     const storageRef = ref(storage, `users/${file.name}`);
+
+  //     await uploadBytes(storageRef, file);
+  //     const getFiles = await getDownloadURL(storageRef);
+
+  //     setUrlPhoto(getFiles);
+  //   }
+  // };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <FirebaseContext.Provider value={{ firebase, user }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<p>Luis Mario</p>} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
+    </FirebaseContext.Provider>
+  );
 }
 
-export default App
+export default App;

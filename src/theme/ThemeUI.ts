@@ -4,6 +4,8 @@ import { fontSizes } from "./base/variables";
 const defaultTheme: ITheme = {
   brand: {
     primaryMain: "#D9E6E1",
+    primaryDark: "#1358B4",
+    secondaryMain: "#104489",
   },
   platform: {
     black: "#2A2A33",
@@ -20,8 +22,6 @@ const defaultTheme: ITheme = {
     white: "#ffffff",
     veryLightGray: "#fafafa",
     lightGrayishBlue: "#e2e3ea",
-    blueMain: "#1358B4",
-    blueDark: "#104489",
   },
   fontSizes,
 };

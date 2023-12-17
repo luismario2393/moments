@@ -11,12 +11,11 @@ type PropsType = {
   placeholder?: string;
   disabled?: boolean;
   value?: string;
-
+  autoComplete?: string;
   required?: boolean;
-
   error?: string;
 
-  onChange?: (text: ChangeEvent) => void;
+  onChange?: (text: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const Input = (props: PropsType) => {
@@ -28,10 +27,9 @@ const Input = (props: PropsType) => {
     id,
     placeholder,
     name,
-
     error,
-
     onChange,
+    autoComplete,
     required,
   } = props;
   return (
@@ -48,7 +46,8 @@ const Input = (props: PropsType) => {
         placeholder={placeholder}
         name={name}
         value={value}
-        onChange={(e: ChangeEvent) => onChange && onChange(e)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange && onChange(e)}
+        autoComplete={autoComplete}
       />
     </FormGroup>
   );

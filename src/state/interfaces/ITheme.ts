@@ -1,6 +1,8 @@
 export interface ITheme {
   brand: {
     primaryMain: string;
+    primaryDark: string;
+    secondaryMain: string;
   };
   platform: {
     black: string;
@@ -17,8 +19,6 @@ export interface ITheme {
     white: string;
     veryLightGray: string;
     lightGrayishBlue: string;
-    blueMain: string;
-    blueDark: string;
   };
 
   fontSizes: {

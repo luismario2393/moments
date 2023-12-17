@@ -1,8 +1,176 @@
-import { Input } from "../../components";
-import { InputTypes } from "../../state/emun";
+import {
+  Button,
+  Input,
+  Layout,
+  LogoLetra,
+  Typography as CustomTypography,
+  CustomLink,
+} from "../../components";
+import { ContainerLink } from "../../components/common";
+import { ButtonType, InputTypes, TypographyType } from "../../state/emun";
+import { Divider, Form, Upload, message } from "antd";
+import { IInfoForm } from "../../state/interfaces/IInfoForm";
+import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import type { UploadChangeParam } from "antd/es/upload";
+import { useState } from "react";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 const Register = () => {
-  return <Input type={InputTypes.text} id="name" label="Nombre" name="name" />;
+  const [messageApi, contextHolder] = message.useMessage();
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [urlPhoto, setUrlPhoto] = useState<string>();
+  const auth = getAuth();
+  const onSubmit = (values: IInfoForm) => {
+    createUserWithEmailAndPassword(
+      auth,
+      values.email ?? "",
+      values.password ?? ""
+    )
+      .then((userCredential) => {
+        const user = userCredential.user;
+        updateProfile(user, {
+          displayName: values.name ?? "",
+          photoURL: urlPhoto,
+        }).then(() => {
+          console.log("urlPhoto", urlPhoto);
+          form.resetFields();
+          messageApi.success({
+            type: "success",
+            content: "Registro exitoso",
+          });
+        });
+      })
+      .catch(() => {
+        messageApi.error({
+          type: "error",
+          content: "Error al registrarse intente de nuevo",
+        });
+      });
+  };
+
+  const beforeUpload = (file: RcFile) => {
+    console.log({ file });
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const handleChange: UploadProps["onChange"] = async (
+    info: UploadChangeParam<UploadFile>
+  ) => {
+    const storage = getStorage();
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      setLoading(false);
+
+      const storageRef = ref(storage, `users/${info.file.name}-${Date.now()}}`);
+
+      await uploadBytes(storageRef, info.file.originFileObj as Blob);
+      const getFiles = await getDownloadURL(storageRef);
+
+      setUrlPhoto(getFiles);
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Sube tu foto</div>
+    </div>
+  );
+
+  return (
+    <Layout center={"true"}>
+      {contextHolder}
+      <LogoLetra width="200" height="200" />
+      <Divider />
+      <CustomTypography type={TypographyType.HeadlineH2} text={"Regístrate"} />
+
+      <Form
+        form={form}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onSubmit}
+        autoComplete="on"
+      >
+        <Upload
+          listType="picture-card"
+          className="avatar-uploader"
+          showUploadList={false}
+          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+          beforeUpload={beforeUpload}
+          onChange={handleChange}
+        >
+          {urlPhoto ? (
+            <img src={urlPhoto} alt="avatar" style={{ width: "100%" }} />
+          ) : (
+            uploadButton
+          )}
+        </Upload>
+        <Input
+          type={InputTypes.text}
+          id="input-name"
+          name={"name"}
+          label={"Nombre"}
+          placeholder={"Escribe tu nombre"}
+          required={true}
+          error={"El nombre es requerido"}
+          value={form.getFieldValue("name")}
+          autoComplete="username"
+        />
+
+        <Input
+          type={InputTypes.email}
+          id="input-email"
+          name={"email"}
+          label={"Correo electrónico"}
+          placeholder={"Escribe tu correo electrónico"}
+          required={true}
+          error={"El correo electrónico es requerido"}
+          value={form.getFieldValue("email")}
+          autoComplete="username"
+        />
+
+        <Input
+          type={InputTypes.password}
+          id="input-password"
+          name={"password"}
+          label={"Contraseña"}
+          placeholder={"Escribe tu contraseña"}
+          required={true}
+          error={"La contraseña es requerida"}
+          value={form.getFieldValue("password")}
+          autoComplete="current-password"
+        />
+
+        <Divider />
+
+        <Button customType={ButtonType.primary} htmlType="submit">
+          Regístrate
+        </Button>
+      </Form>
+
+      <ContainerLink>
+        <CustomLink to={"/login"}>Inicia sesión</CustomLink>
+      </ContainerLink>
+    </Layout>
+  );
 };
 
 export default Register;

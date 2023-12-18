@@ -20,12 +20,14 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [urlPhoto, setUrlPhoto] = useState<string>();
+  const navigate = useNavigate();
   const auth = getAuth();
   const onSubmit = (values: IInfoForm) => {
     createUserWithEmailAndPassword(
@@ -39,12 +41,12 @@ const Register = () => {
           displayName: values.name ?? "",
           photoURL: urlPhoto,
         }).then(() => {
-          console.log("urlPhoto", urlPhoto);
           form.resetFields();
           messageApi.success({
             type: "success",
             content: "Registro exitoso",
           });
+          navigate("/home");
         });
       })
       .catch(() => {

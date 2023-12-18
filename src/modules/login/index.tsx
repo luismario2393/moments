@@ -12,10 +12,12 @@ import { Divider, Form, message } from "antd";
 import { IInfoForm } from "../../state/interfaces/IInfoForm";
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const auth = getAuth();
   const onSubmit = (values: IInfoForm) => {
@@ -28,6 +30,7 @@ const Login = () => {
           type: "success",
           content: `Bienvenido ${user?.displayName}` ?? "Bienvenidos",
         });
+        navigate("/home");
       })
       .catch(() => {
         messageApi.error({

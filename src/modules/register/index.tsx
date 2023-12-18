@@ -1,7 +1,7 @@
 import {
   Button,
   Input,
-  Layout,
+  LayoutAuth,
   LogoLetra,
   Typography as CustomTypography,
   CustomLink,
@@ -98,7 +98,7 @@ const Register = () => {
   );
 
   return (
-    <Layout center={"true"}>
+    <LayoutAuth center={"true"}>
       {contextHolder}
       <LogoLetra width="200" height="200" />
       <Divider />
@@ -171,7 +171,7 @@ const Register = () => {
       <ContainerLink>
         <CustomLink to={"/login"}>Inicia sesión</CustomLink>
       </ContainerLink>
-    </Layout>
+    </LayoutAuth>
   );
 };
 

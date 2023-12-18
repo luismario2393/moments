@@ -6,8 +6,8 @@ interface Props {
   center?: string;
 }
 
-const Layout: FC<Props> = ({ children, center }) => {
+const LayoutAuth: FC<Props> = ({ children, center }) => {
   return <Container center={center}>{children}</Container>;
 };
 
-export default Layout;
+export default LayoutAuth;

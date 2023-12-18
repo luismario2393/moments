@@ -35,19 +35,15 @@ export const ButtonPrimary = styled(Button)`
 `;
 
 export const ButtonSecondary = styled(Button)`
-  box-sizing: border-box;
-  background: ${({ theme }) => theme.platform.white};
-  border: 1px solid ${({ theme }) => theme.brand.primaryMain};
+  background-color: ${({ theme }) => theme.platform.white};
+  border: 1px solid ${({ theme }) => theme.brand.primaryDark};
+  color: ${({ theme }) => theme.platform.black};
+  padding: 0;
+  width: 44px;
+  height: 44px;
   :hover,
   :active,
   :focus {
-    border: 2px solid ${({ theme }) => theme.brand.primaryMain};
-    padding: 10px 19px;
     color: ${({ theme }) => theme.platform.black};
-  }
-  :disabled {
-    background: ${({ theme }) => theme.platform.white};
-    color: ${({ theme }) => theme.platform.grayscaleBorders};
-    border: 1px solid ${({ theme }) => theme.platform.grayscaleBorders};
   }
 `;

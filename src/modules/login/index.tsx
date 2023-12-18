@@ -1,7 +1,7 @@
 import {
   Button,
   Input,
-  Layout,
+  LayoutAuth,
   LogoLetra,
   Typography as CustomTypography,
   CustomLink,
@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <Layout center={"true"}>
+    <LayoutAuth center={"true"}>
       {contextHolder}
       <LogoLetra width="200" height="200" />
       <Divider />
@@ -92,7 +92,7 @@ const Login = () => {
       <ContainerLink>
         <CustomLink to={"/register"}>Crea una cuenta</CustomLink>
       </ContainerLink>
-    </Layout>
+    </LayoutAuth>
   );
 };
 

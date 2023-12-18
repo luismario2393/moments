@@ -22,8 +22,9 @@ import { ButtonType, InputTypes } from "../../state/emun";
 import { IInfoForm } from "../../state/interfaces/IInfoForm";
 import { Button, Input } from "../../components";
 import firebase from "../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 const Capture: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -32,6 +33,7 @@ const Capture: React.FC = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const db = firebase.firestore;
+  const user = getAuth().currentUser;
 
   const startCamera = useCallback(async () => {
     try {
@@ -121,13 +123,14 @@ const Capture: React.FC = () => {
         onClick: () => {
           setPhoto(null);
           startCamera();
+          form.resetFields();
         },
         show: !!photo,
         titleTooltip: "Cancelar foto",
       },
       {
         icon: <UploadOutlined />,
-        onClick: () => console.log("upload"),
+        onClick: () => navigate("/share"),
         show: !photo,
         titleTooltip: "Subir foto",
       },
@@ -138,16 +141,24 @@ const Capture: React.FC = () => {
         titleTooltip: "Regresar",
       },
     ],
-    [navigate, startCamera, photo]
+    [navigate, startCamera, photo, form]
   );
 
   const onSubmit = async (values: IInfoForm) => {
     try {
       setLoading(true);
       const photo = await uploadPhoto();
+      const timestamp = serverTimestamp();
       await addDoc(collection(db, "moments"), {
+        photoUser: user?.photoURL,
+        userId: user?.uid,
+        userName: user?.displayName,
         description: values.description,
         photo,
+        createAt: timestamp,
+        updateAt: timestamp,
+        likes: [],
+        shared: [],
       });
       message.success("Momento subido con éxito");
       navigate("/home");

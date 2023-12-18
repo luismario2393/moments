@@ -103,7 +103,7 @@ const LayoutHome: FC<Props> = ({ children }) => {
                 Bienvenido <span>{user?.displayName}</span>
               </Subtitle>
             )}
-            <Tooltip placement="bottom" title={"Agregar foto"} arrow={true}>
+            <Tooltip placement="bottom" title={"Agregar momento"} arrow={true}>
               <FileAddOutlined
                 onClick={() => {
                   navigate("/capture");

@@ -22,6 +22,7 @@ export const Container = styled.div<IContainer>`
 
 export const StyledLayout = styled(Layout)`
   height: 100vh;
+
   .ant-layout-sider {
     background: ${({ theme }) => theme.brand.primaryDark};
   }
@@ -47,9 +48,12 @@ export const Subtitle = styled.span`
 `;
 export const ContainerContent = styled.h1`
   padding: 24;
-  height: 80%;
-  background: ${({ theme }) => theme.platform.white};
+  height: 100%;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 50px;
 `;
 
 export const StyledContent = styled(Content)`

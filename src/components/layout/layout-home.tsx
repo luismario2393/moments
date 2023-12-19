@@ -7,7 +7,7 @@ import {
   StyledLayout,
   Subtitle,
 } from "./style";
-import { Layout, Menu, Tooltip } from "antd";
+import { Layout, Menu, Tooltip, message } from "antd";
 const { Sider } = Layout;
 import {
   LogoutOutlined,
@@ -35,7 +35,7 @@ const LayoutHome: FC<Props> = ({ children }) => {
       signOut(auth);
       navigate("/login");
     } catch (error) {
-      console.log(error);
+      message.error("Error al cerrar sesión");
     }
   }, [auth, navigate]);
 
@@ -79,13 +79,15 @@ const LayoutHome: FC<Props> = ({ children }) => {
           mode="inline"
           defaultSelectedKeys={["1"]}
           items={
-            items &&
-            items.map((item) => {
-              return {
-                ...item,
-                onClick: item.onClick,
-              };
-            })
+            user
+              ? items &&
+                items.map((item) => {
+                  return {
+                    ...item,
+                    onClick: item.onClick,
+                  };
+                })
+              : []
           }
         />
       </Sider>
@@ -97,13 +99,19 @@ const LayoutHome: FC<Props> = ({ children }) => {
                 Bienvenido <span>{user?.displayName}</span>
               </Subtitle>
             )}
-            <Tooltip placement="bottom" title={"Agregar momento"} arrow={true}>
-              <FileAddOutlined
-                onClick={() => {
-                  navigate("/capture");
-                }}
-              />
-            </Tooltip>
+            {user && (
+              <Tooltip
+                placement="bottom"
+                title={"Agregar momento"}
+                arrow={true}
+              >
+                <FileAddOutlined
+                  onClick={() => {
+                    navigate("/capture");
+                  }}
+                />
+              </Tooltip>
+            )}
             {(isCollapsed || (!isBroken && !isCollapsed)) && (
               <Logo width="100" height="50" />
             )}

@@ -31,7 +31,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, values.email ?? "", values.password ?? "")
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log({ user });
+
         form.resetFields();
         messageApi.success({
           type: "success",

@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { Button, LayoutHome, Typography } from "../../components";
+import { Button, CustomLink, LayoutHome, Typography } from "../../components";
 import firebase from "../../firebase";
 import {
   collection,
@@ -33,12 +33,11 @@ const Home = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const docs: any[] = [];
       querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
         docs.push({ ...doc.data(), id: doc.id });
       });
       setMoments(docs);
     } catch (error) {
-      console.log(error);
+      message.error("Error al obtener los momentos");
     }
   }, [db, setMoments]);
 
@@ -87,70 +86,80 @@ const Home = () => {
   };
 
   return (
-    <LayoutHome>
-      {moments.length > 0 &&
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        moments.map((moment: any) => {
-          const isLiked = moment.likes.includes(user?.uid ?? "");
-          const isShared = moment.shared.includes(user?.uid ?? "");
+    <>
+      <LayoutHome>
+        {user ? (
+          <>
+            {moments.length > 0 &&
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              moments.map((moment: any) => {
+                const isLiked = moment.likes.includes(user?.uid ?? "");
+                const isShared = moment.shared.includes(user?.uid ?? "");
 
-          return (
-            <>
-              <CardMoments>
-                <ContainerImage src={moment.photo}></ContainerImage>
-                <ContainerText>
-                  <ContainerUser>
-                    <Avatar
-                      src={moment.photoUser}
-                      alt={`image`}
-                      style={{ border: "1px solid #1358B4" }}
-                    />
-                    <div>
-                      <Typography
-                        type={TypographyType.BodyMedium}
-                        text={moment.userName}
-                      />
-                      <Typography
-                        type={TypographyType.Caption}
-                        text={moment.description}
-                      />
-                    </div>
-                  </ContainerUser>
-                  <ContainerButtons
-                    isLiked={`${isLiked}`}
-                    isShared={`${isShared}`}
-                  >
-                    <Button
-                      className="button-like"
-                      customType={ButtonType.secondary}
-                      onClick={() => handleLike(moment.id, user?.uid ?? "")}
-                    >
-                      <LikeOutlined />
-                    </Button>
-                    <Typography
-                      type={TypographyType.BodyMedium}
-                      text={`${moment.likes.length}`}
-                    />
-                    <Button
-                      className="button-share"
-                      customType={ButtonType.secondary}
-                      onClick={() =>
-                        handleShareMoment(moment.id, user?.uid ?? "")
-                      }
-                    >
-                      <ShareAltOutlined />
-                    </Button>
-                    <Typography
-                      type={TypographyType.BodyMedium}
-                      text={`${moment.shared.length}`}
-                    />
-                  </ContainerButtons>
-                </ContainerText>
-              </CardMoments>
-            </>
-          );
-        })}
-    </LayoutHome>
+                return (
+                  <>
+                    <CardMoments>
+                      <ContainerImage src={moment.photo}></ContainerImage>
+                      <ContainerText>
+                        <ContainerUser>
+                          <Avatar
+                            src={moment.photoUser}
+                            alt={`image`}
+                            style={{ border: "1px solid #1358B4" }}
+                          />
+                          <div>
+                            <Typography
+                              type={TypographyType.BodyMedium}
+                              text={moment.userName}
+                            />
+                            <Typography
+                              type={TypographyType.Caption}
+                              text={moment.description}
+                            />
+                          </div>
+                        </ContainerUser>
+                        <ContainerButtons
+                          isLiked={`${isLiked}`}
+                          isShared={`${isShared}`}
+                        >
+                          <Button
+                            className="button-like"
+                            customType={ButtonType.secondary}
+                            onClick={() =>
+                              handleLike(moment.id, user?.uid ?? "")
+                            }
+                          >
+                            <LikeOutlined />
+                          </Button>
+                          <Typography
+                            type={TypographyType.BodyMedium}
+                            text={`${moment.likes.length}`}
+                          />
+                          <Button
+                            className="button-share"
+                            customType={ButtonType.secondary}
+                            onClick={() =>
+                              handleShareMoment(moment.id, user?.uid ?? "")
+                            }
+                          >
+                            <ShareAltOutlined />
+                          </Button>
+                          <Typography
+                            type={TypographyType.BodyMedium}
+                            text={`${moment.shared.length}`}
+                          />
+                        </ContainerButtons>
+                      </ContainerText>
+                    </CardMoments>
+                  </>
+                );
+              })}
+          </>
+        ) : (
+          <CustomLink to={"/login"}>Debes iniciar sesión</CustomLink>
+        )}
+      </LayoutHome>
+    </>
   );
 };
 

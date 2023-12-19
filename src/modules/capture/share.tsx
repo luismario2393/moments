@@ -13,7 +13,7 @@ import firebase from "../../firebase";
 import ButtonCapture from "./components/button-capture";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { IInfoForm } from "../../state/interfaces/IInfoForm";
-import { Button, Input } from "../../components";
+import { Button, CustomLink, Input } from "../../components";
 import { ButtonType, InputTypes } from "../../state/emun";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { UploadChangeParam, UploadFile } from "antd/es/upload";
@@ -110,58 +110,62 @@ const Share = () => {
 
   return (
     <ContainerVideo>
-      <Form
-        form={form}
-        name="basic"
-        initialValues={{ remember: true }}
-        onFinish={onSubmit}
-        autoComplete="on"
-      >
-        <Upload
-          listType="picture-card"
-          className="avatar-uploader"
-          showUploadList={false}
-          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-          beforeUpload={beforeUpload}
-          onChange={handleChange}
+      {user ? (
+        <Form
+          form={form}
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={onSubmit}
+          autoComplete="on"
         >
-          {photo ? (
-            <img src={photo} alt="avatar" style={{ width: "100%" }} />
-          ) : (
-            uploadButton
-          )}
-        </Upload>
-        <ContainerButtons>
-          {buttonCap.map(({ icon, onClick, show, titleTooltip }) => (
-            <ButtonCapture
-              key={`button-${Math.random().toString(36)}`}
-              onClick={onClick}
-              show={show}
-              titleTooltip={titleTooltip}
-            >
-              {icon}
-            </ButtonCapture>
-          ))}
-        </ContainerButtons>
-        <Input
-          type={InputTypes.text}
-          id="input-description"
-          name={"description"}
-          label={"Descripción"}
-          placeholder={"Agrega una pequeñá descripción"}
-          value={form.getFieldValue("description")}
-          autoComplete="username"
-        />
+          <Upload
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+            beforeUpload={beforeUpload}
+            onChange={handleChange}
+          >
+            {photo ? (
+              <img src={photo} alt="avatar" style={{ width: "100%" }} />
+            ) : (
+              uploadButton
+            )}
+          </Upload>
+          <ContainerButtons>
+            {buttonCap.map(({ icon, onClick, show, titleTooltip }) => (
+              <ButtonCapture
+                key={`button-${Math.random().toString(36)}`}
+                onClick={onClick}
+                show={show}
+                titleTooltip={titleTooltip}
+              >
+                {icon}
+              </ButtonCapture>
+            ))}
+          </ContainerButtons>
+          <Input
+            type={InputTypes.text}
+            id="input-description"
+            name={"description"}
+            label={"Descripción"}
+            placeholder={"Agrega una pequeñá descripción"}
+            value={form.getFieldValue("description")}
+            autoComplete="username"
+          />
 
-        <Button
-          customType={ButtonType.primary}
-          htmlType="submit"
-          style={{ marginTop: "8px" }}
-          disabled={loading}
-        >
-          {loading ? <LoadingOutlined /> : "Agregar foto"}
-        </Button>
-      </Form>
+          <Button
+            customType={ButtonType.primary}
+            htmlType="submit"
+            style={{ marginTop: "8px" }}
+            disabled={loading}
+          >
+            {loading ? <LoadingOutlined /> : "Agregar foto"}
+          </Button>
+        </Form>
+      ) : (
+        <CustomLink to={"/login"}>Debes iniciar sesión</CustomLink>
+      )}
     </ContainerVideo>
   );
 };

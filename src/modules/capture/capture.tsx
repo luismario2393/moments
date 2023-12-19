@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { Form, message } from "antd";
 import { ButtonType, InputTypes } from "../../state/emun";
 import { IInfoForm } from "../../state/interfaces/IInfoForm";
-import { Button, Input } from "../../components";
+import { Button, CustomLink, Input } from "../../components";
 import firebase from "../../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -42,7 +42,7 @@ const Capture: React.FC = () => {
         videoRef.current.srcObject = stream;
       }
     } catch (error) {
-      console.error("Error accessing camera:", error);
+      message.error("Error al acceder a la cámara");
     }
   }, [videoRef]);
 
@@ -170,51 +170,57 @@ const Capture: React.FC = () => {
 
   return (
     <ContainerVideo>
-      {photo ? (
-        <img src={photo} alt="Captured" />
+      {user ? (
+        <>
+          {photo ? (
+            <img src={photo} alt="Captured" />
+          ) : (
+            <Video ref={videoRef} autoPlay muted playsInline />
+          )}
+          <ContainerButtons>
+            {buttonCap.map(({ icon, onClick, show, titleTooltip }) => (
+              <ButtonCapture
+                key={`button-${Math.random().toString(36)}`}
+                onClick={onClick}
+                show={show}
+                titleTooltip={titleTooltip}
+              >
+                {icon}
+              </ButtonCapture>
+            ))}
+          </ContainerButtons>
+
+          {photo && (
+            <Form
+              form={form}
+              name="basic"
+              initialValues={{ remember: true }}
+              onFinish={onSubmit}
+              autoComplete="on"
+            >
+              <Input
+                type={InputTypes.text}
+                id="input-description"
+                name={"description"}
+                label={"Descripción"}
+                placeholder={"Agrega una pequeñá descripción"}
+                value={form.getFieldValue("description")}
+                autoComplete="username"
+              />
+
+              <Button
+                customType={ButtonType.primary}
+                htmlType="submit"
+                style={{ marginTop: "8px" }}
+                disabled={loading}
+              >
+                {loading ? <LoadingOutlined /> : "Agregar foto"}
+              </Button>
+            </Form>
+          )}
+        </>
       ) : (
-        <Video ref={videoRef} autoPlay muted playsInline />
-      )}
-      <ContainerButtons>
-        {buttonCap.map(({ icon, onClick, show, titleTooltip }) => (
-          <ButtonCapture
-            key={`button-${Math.random().toString(36)}`}
-            onClick={onClick}
-            show={show}
-            titleTooltip={titleTooltip}
-          >
-            {icon}
-          </ButtonCapture>
-        ))}
-      </ContainerButtons>
-
-      {photo && (
-        <Form
-          form={form}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onSubmit}
-          autoComplete="on"
-        >
-          <Input
-            type={InputTypes.text}
-            id="input-description"
-            name={"description"}
-            label={"Descripción"}
-            placeholder={"Agrega una pequeñá descripción"}
-            value={form.getFieldValue("description")}
-            autoComplete="username"
-          />
-
-          <Button
-            customType={ButtonType.primary}
-            htmlType="submit"
-            style={{ marginTop: "8px" }}
-            disabled={loading}
-          >
-            {loading ? <LoadingOutlined /> : "Agregar foto"}
-          </Button>
-        </Form>
+        <CustomLink to={"/login"}>Debes iniciar sesión</CustomLink>
       )}
     </ContainerVideo>
   );

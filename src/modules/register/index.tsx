@@ -8,16 +8,22 @@ import {
 } from "../../components";
 import { ContainerLink } from "../../components/common";
 import { ButtonType, InputTypes, TypographyType } from "../../state/emun";
-import { Divider, Form, Upload, message } from "antd";
+import { Divider, Form, Tooltip, Upload, message } from "antd";
 import { IInfoForm } from "../../state/interfaces/IInfoForm";
 import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import type { UploadChangeParam } from "antd/es/upload";
 import { useState } from "react";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  GoogleOutlined,
+} from "@ant-design/icons";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
@@ -75,6 +81,26 @@ const Register = () => {
       const getFiles = await getDownloadURL(storageRef);
 
       setUrlPhoto(getFiles);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const authProvider = new GoogleAuthProvider();
+
+    try {
+      await signInWithPopup(auth, authProvider);
+
+      messageApi.success({
+        type: "success",
+        content: "Inicio de sesión exitoso con Google",
+      });
+
+      navigate("/home");
+    } catch (error) {
+      messageApi.error({
+        type: "error",
+        content: "Error al iniciar sesión con Google. Intente de nuevo",
+      });
     }
   };
 
@@ -157,6 +183,19 @@ const Register = () => {
       </Form>
 
       <ContainerLink>
+        <Tooltip
+          placement="top"
+          title={"Inicia sesión con google"}
+          arrow={true}
+        >
+          <Button
+            customType={ButtonType.secondary}
+            onClick={handleGoogleSignIn}
+            style={{ marginBottom: 16 }}
+          >
+            <GoogleOutlined />
+          </Button>
+        </Tooltip>
         <CustomLink to={"/login"}>Inicia sesión</CustomLink>
       </ContainerLink>
     </LayoutAuth>

@@ -1,7 +1,14 @@
 import styled from "styled-components";
 
 export const ContainerLink = styled.div`
-  margin: 20px 0 0 200px;
+  margin: 20px 0 0 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 300px;
+  .anticon {
+    color: ${({ theme }) => theme.brand.primaryDark};
+  }
 `;
 
 export const ContainerButton = styled.div`

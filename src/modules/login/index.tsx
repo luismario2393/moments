@@ -8,10 +8,16 @@ import {
 } from "../../components";
 import { ContainerLink } from "../../components/common";
 import { ButtonType, InputTypes, TypographyType } from "../../state/emun";
-import { Divider, Form, message } from "antd";
+import { Divider, Form, Tooltip, message } from "antd";
 import { IInfoForm } from "../../state/interfaces/IInfoForm";
+import { GoogleOutlined } from "@ant-design/icons";
 
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -20,6 +26,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const auth = getAuth();
+
   const onSubmit = (values: IInfoForm) => {
     signInWithEmailAndPassword(auth, values.email ?? "", values.password ?? "")
       .then((userCredential) => {
@@ -39,6 +46,26 @@ const Login = () => {
             "Error al iniciar sesión intente de nuevo, tu correo o contraseña son incorrectos",
         });
       });
+  };
+
+  const handleGoogleSignIn = async () => {
+    const authProvider = new GoogleAuthProvider();
+
+    try {
+      await signInWithPopup(auth, authProvider);
+
+      messageApi.success({
+        type: "success",
+        content: "Inicio de sesión exitoso con Google",
+      });
+
+      navigate("/home");
+    } catch (error) {
+      messageApi.error({
+        type: "error",
+        content: "Error al iniciar sesión con Google. Intente de nuevo",
+      });
+    }
   };
 
   return (
@@ -90,6 +117,19 @@ const Login = () => {
       </Form>
 
       <ContainerLink>
+        <Tooltip
+          placement="top"
+          title={"Inicia sesión con google"}
+          arrow={true}
+        >
+          <Button
+            customType={ButtonType.secondary}
+            onClick={handleGoogleSignIn}
+            style={{ marginBottom: 16 }}
+          >
+            <GoogleOutlined />
+          </Button>
+        </Tooltip>
         <CustomLink to={"/register"}>Crea una cuenta</CustomLink>
       </ContainerLink>
     </LayoutAuth>

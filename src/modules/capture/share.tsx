@@ -16,8 +16,9 @@ import { IInfoForm } from "../../state/interfaces/IInfoForm";
 import { Button, Input } from "../../components";
 import { ButtonType, InputTypes } from "../../state/emun";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
+import { UploadChangeParam, UploadFile } from "antd/es/upload";
 import { getAuth } from "firebase/auth";
+import { beforeUpload } from "../../utils";
 
 const Share = () => {
   const [loading, setLoading] = useState(false);
@@ -78,19 +79,6 @@ const Share = () => {
     } catch (e) {
       message.error("Error al subir el momento");
     }
-  };
-
-  const beforeUpload = (file: RcFile) => {
-    console.log({ file });
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
-    }
-    return isJpgOrPng && isLt2M;
   };
 
   const handleChange: UploadProps["onChange"] = async (

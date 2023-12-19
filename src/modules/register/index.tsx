@@ -10,7 +10,7 @@ import { ContainerLink } from "../../components/common";
 import { ButtonType, InputTypes, TypographyType } from "../../state/emun";
 import { Divider, Form, Upload, message } from "antd";
 import { IInfoForm } from "../../state/interfaces/IInfoForm";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import type { UploadChangeParam } from "antd/es/upload";
 import { useState } from "react";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
@@ -21,6 +21,7 @@ import {
 } from "firebase/auth";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
+import { beforeUpload } from "../../utils";
 
 const Register = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -55,19 +56,6 @@ const Register = () => {
           content: "Error al registrarse intente de nuevo",
         });
       });
-  };
-
-  const beforeUpload = (file: RcFile) => {
-    console.log({ file });
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
-    }
-    return isJpgOrPng && isLt2M;
   };
 
   const handleChange: UploadProps["onChange"] = async (

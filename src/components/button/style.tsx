@@ -3,7 +3,7 @@ import { Button as AntdButton } from "antd";
 
 const Button = styled(AntdButton)`
   border-radius: 4px;
-  font-family: Lexend;
+  font-family: "Lexend";
   border: 0px;
   padding: 10px 20px;
   color: ${({ theme }) => theme.platform.white};

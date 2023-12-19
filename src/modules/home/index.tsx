@@ -41,7 +41,6 @@ const Home = () => {
       console.log(error);
     }
   }, [db, setMoments]);
-  console.log({ moments });
 
   useEffect(() => {
     getMoments();

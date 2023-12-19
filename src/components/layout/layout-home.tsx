@@ -10,7 +10,6 @@ import {
 import { Layout, Menu, Tooltip } from "antd";
 const { Sider } = Layout;
 import {
-  UserOutlined,
   LogoutOutlined,
   HomeOutlined,
   FileAddOutlined,
@@ -49,11 +48,6 @@ const LayoutHome: FC<Props> = ({ children }) => {
         onClick: () => {
           navigate("/home");
         },
-      },
-      {
-        key: "2",
-        icon: <UserOutlined />,
-        label: "Perfil",
       },
 
       {

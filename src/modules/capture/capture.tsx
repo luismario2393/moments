@@ -24,7 +24,7 @@ import { Button, CustomLink, Input } from "../../components";
 import firebase from "../../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { getAuth } from "firebase/auth";
+import { useAuth } from "../../firebase/store";
 
 const Capture: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -33,7 +33,8 @@ const Capture: React.FC = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const db = firebase.firestore;
-  const user = getAuth().currentUser;
+  const auth = useAuth((state) => state.auth);
+  const user = auth.currentUser;
 
   const startCamera = useCallback(async () => {
     try {

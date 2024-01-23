@@ -3,7 +3,7 @@ import firebase, { FirebaseContext } from "./firebase";
 import useAuthentication from "./hooks/useAuthentication";
 import { Register, Login, Home } from "./modules";
 import { Capture, Share } from "./modules/capture";
-import NotFound from "./components/not-found";
+import { NotFound } from "./components";
 
 function App() {
   const user = useAuthentication();
@@ -18,6 +18,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/capture" element={<Capture />} />
           <Route path="/share" element={<Share />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

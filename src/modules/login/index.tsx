@@ -14,18 +14,18 @@ import { GoogleOutlined } from "@ant-design/icons";
 
 import {
   GoogleAuthProvider,
-  getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../firebase/store";
 
 const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const auth = getAuth();
+  const auth = useAuth((state) => state.auth);
 
   const onSubmit = (values: IInfoForm) => {
     signInWithEmailAndPassword(auth, values.email ?? "", values.password ?? "")

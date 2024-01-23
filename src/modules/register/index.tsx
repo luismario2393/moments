@@ -19,7 +19,6 @@ import {
   GoogleOutlined,
 } from "@ant-design/icons";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
   signInWithPopup,
@@ -28,6 +27,7 @@ import {
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { beforeUpload } from "../../utils";
+import { useAuth } from "../../firebase/store";
 
 const Register = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -35,7 +35,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [urlPhoto, setUrlPhoto] = useState<string>();
   const navigate = useNavigate();
-  const auth = getAuth();
+  const auth = useAuth((state) => state.auth);
   const onSubmit = (values: IInfoForm) => {
     createUserWithEmailAndPassword(
       auth,

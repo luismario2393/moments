@@ -1,10 +1,11 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyA4P-oR5elTYYn8ZrzhPjjGorXEYcITAko",
-  authDomain: "moments-app-efd88.firebaseapp.com",
-  projectId: "moments-app-efd88",
-  storageBucket: "moments-app-efd88.appspot.com",
-  messagingSenderId: "15999469490",
-  appId: "1:15999469490:web:9cbc8140721877f8fac6ab",
+  apiKey: "AIzaSyCMPuIfXVZjCmKYcBXEcyHiwwYyzSc0C1c",
+  authDomain: "moments-1cd9c.firebaseapp.com",
+  projectId: "moments-1cd9c",
+  storageBucket: "moments-1cd9c.appspot.com",
+  messagingSenderId: "113922905413",
+  appId: "1:113922905413:web:8f31166553a46550d61a2c",
+  measurementId: "G-JZS2NXMV9Y",
 };
 
 export default firebaseConfig;

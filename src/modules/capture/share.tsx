@@ -17,8 +17,8 @@ import { Button, CustomLink, Input } from "../../components";
 import { ButtonType, InputTypes } from "../../state/emun";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { UploadChangeParam, UploadFile } from "antd/es/upload";
-import { getAuth } from "firebase/auth";
 import { beforeUpload } from "../../utils";
+import { useAuth } from "../../firebase/store";
 
 const Share = () => {
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,8 @@ const Share = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const db = firebase.firestore;
-  const user = getAuth().currentUser;
+  const auth = useAuth((state) => state.auth);
+  const user = auth.currentUser;
   const buttonCap = useMemo(
     () => [
       {

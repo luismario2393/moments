@@ -1,14 +1,15 @@
 import { useState, useEffect, SetStateAction } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { useAuth } from "../firebase/store";
 
 function useAuthentication() {
   const [userAuthenticated, setUserAutenticated] =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     useState<SetStateAction<null | any>>(null);
+  const auth = useAuth((state) => state.auth);
 
   useEffect(() => {
     const unSuscribe = () => {
-      const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
         if (user) {
           setUserAutenticated(user);
@@ -23,7 +24,7 @@ function useAuthentication() {
       });
     };
     return unSuscribe();
-  }, []);
+  }, [auth]);
 
   return userAuthenticated;
 }

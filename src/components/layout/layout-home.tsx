@@ -15,8 +15,9 @@ import {
   FileAddOutlined,
 } from "@ant-design/icons";
 import { Logo, LogoLetraWhite } from "..";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../firebase/store";
 
 interface Props {
   children: ReactNode;
@@ -26,7 +27,7 @@ const LayoutHome: FC<Props> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isBroken, setIsBroken] = useState(false);
 
-  const auth = getAuth();
+  const auth = useAuth((state) => state.auth);
   const navigate = useNavigate();
   const user = auth.currentUser;
 
